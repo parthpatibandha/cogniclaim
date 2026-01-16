@@ -1,0 +1,44 @@
+services:
+  # Development services
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "8090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cogniclaim
+      POSTGRES_PASSWORD: "1aQ3N6KL6bZYYwjkcc3Dtt789GpdJ_T0"
+    volumes:
+      - cogniclaim_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "8091:6379"
+    command: redis-server --requirepass "TUaKiSM8V47x_kA0lQ4tlIjmTg9x5RSC"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  # Test services
+  postgres_test:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "9090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cogniclaim_test
+      POSTGRES_PASSWORD: "XGdllao06HjbcOlp8lNq2CR3AJFEclAn"
+    volumes:
+      - cogniclaim_test_data:/var/lib/postgresql/data
+
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - "9091:6379"
+    command: redis-server --requirepass "lsjLPJTgAzxu6DYHbHYCSjywgqo0W5yx"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+volumes:
+  cogniclaim_data:
+  cogniclaim_test_data:

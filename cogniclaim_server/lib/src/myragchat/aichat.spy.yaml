@@ -1,0 +1,13 @@
+class: AiChat
+
+fields:
+  ### The unique id 
+  uniqueId: String
+  ### The greeting message.
+  message: String
+  ### The author of the greeting message.
+  author: String
+  ### The time when the message was created.
+  timestamp: DateTime
+  ### The image file
+  image: String?

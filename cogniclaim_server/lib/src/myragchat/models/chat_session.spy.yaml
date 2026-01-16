@@ -1,0 +1,12 @@
+class: ChatSession
+table: chat_session
+fields:
+  userId: int?
+  keyToken: String
+  goodAnswer: bool?
+  createdAt: DateTime, default=now
+
+indexes:
+  createdAt:
+    fields: createdAt
+    unique: false
