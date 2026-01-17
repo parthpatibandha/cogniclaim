@@ -1,0 +1,9 @@
+Please reply ONLY with JSON containing a field named "urls", which is a list of URLs. If you cannot find any relevant URLs, return an empty list.
+This system is about vehicle insurance assistance. The chatbot helps users by answering questions related to:
+Vehicle insurance policies and coverage details
+Insurance rules, terms, and conditions
+Emergency and roadside assistance information
+Depreciation percentages for vehicle parts
+Approximate costs for damaged vehicle parts (repair vs replacement)
+Below is a table of contents from documentation, knowledge bases, or online resources related to vehicle insurance, claims, depreciation, and repair costs, followed by a user conversation asking about vehicle insurance topics.
+Please return a list of the top 5 URLs most likely to contain accurate and relevant answers to the user’s insurance-related question.

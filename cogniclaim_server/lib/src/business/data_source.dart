@@ -6,6 +6,7 @@ abstract class DataSource {
   Stream<RawRAGDocument> fetch(Session session, DataFetcher fetcher);
 
   String get name;
+  String get url;
 }
 
 enum DataSourceType {
@@ -15,7 +16,7 @@ enum DataSourceType {
 }
 
 class RawRAGDocument {
-  final Uri sourceUrl;
+  final String sourceUrl;
   final String document;
   final String title;
   final DataSourceType dataSourceType;

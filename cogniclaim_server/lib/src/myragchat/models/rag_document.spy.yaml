@@ -4,7 +4,7 @@ table: rag_document
 fields:
   embedding: Vector(768)
   fetchTime: DateTime
-  sourceUrl: Uri
+  sourceUrl: String
   content: String
   title: String
   embeddingSummary: String

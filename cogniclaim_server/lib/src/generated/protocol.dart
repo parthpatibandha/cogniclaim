@@ -49,6 +49,68 @@ class Protocol extends _i1.SerializationManagerServer {
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
     _i2.TableDefinition(
+      name: 'aichats',
+      dartName: 'AiChat',
+      schema: 'public',
+      module: 'cogniclaim',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'aichats_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'uniqueId',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'message',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'author',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'timestamp',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _i2.ColumnDefinition(
+          name: 'image',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'aichats_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
       name: 'chat_message',
       dartName: 'ChatMessage',
       schema: 'public',
@@ -198,7 +260,7 @@ class Protocol extends _i1.SerializationManagerServer {
           name: 'sourceUrl',
           columnType: _i2.ColumnType.text,
           isNullable: false,
-          dartType: 'Uri',
+          dartType: 'String',
         ),
         _i2.ColumnDefinition(
           name: 'content',
@@ -574,6 +636,8 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
+      case _i7.AiChat:
+        return _i7.AiChat.t;
       case _i8.ChatMessage:
         return _i8.ChatMessage.t;
       case _i10.ChatSession:

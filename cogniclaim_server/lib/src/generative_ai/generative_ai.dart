@@ -10,7 +10,7 @@ class GenerativeAi {
   final String _geminiAPIKey;
 
   GenerativeAi()
-    : _geminiAPIKey = Serverpod.instance.getPassword('geminiAPIKey')!;
+    : _geminiAPIKey = Serverpod.instance.getPassword('geminiApiKey')!;
 
   GenerativeAi.withAPIKey(String geminiAPIKey) : _geminiAPIKey = geminiAPIKey;
 
@@ -72,7 +72,17 @@ class GenerativeAi {
     final agent = _createAgent();
     try {
       final embedding = await agent.embedQuery(document);
-      return Vector(embedding.embeddings);
+      final rawEmbedding = embedding.embeddings;
+      final safeEmbedding = List<double>.generate(
+        rawEmbedding.length,
+        (i) {
+          final v = rawEmbedding[i].toDouble();
+          return v.isFinite ? v : 0.0;
+        },
+        growable: false,
+      );
+
+      return Vector(safeEmbedding);
     } catch (e) {
       //throw GenerativeAiException(message: e.toString());
       throw Exception(e.toString());

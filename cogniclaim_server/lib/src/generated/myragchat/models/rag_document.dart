@@ -32,7 +32,7 @@ abstract class RAGDocument
     int? id,
     required _i1.Vector embedding,
     required DateTime fetchTime,
-    required Uri sourceUrl,
+    required String sourceUrl,
     required String content,
     required String title,
     required String embeddingSummary,
@@ -50,7 +50,7 @@ abstract class RAGDocument
       fetchTime: _i1.DateTimeJsonExtension.fromJson(
         jsonSerialization['fetchTime'],
       ),
-      sourceUrl: _i1.UriJsonExtension.fromJson(jsonSerialization['sourceUrl']),
+      sourceUrl: jsonSerialization['sourceUrl'] as String,
       content: jsonSerialization['content'] as String,
       title: jsonSerialization['title'] as String,
       embeddingSummary: jsonSerialization['embeddingSummary'] as String,
@@ -71,7 +71,7 @@ abstract class RAGDocument
 
   DateTime fetchTime;
 
-  Uri sourceUrl;
+  String sourceUrl;
 
   String content;
 
@@ -95,7 +95,7 @@ abstract class RAGDocument
     int? id,
     _i1.Vector? embedding,
     DateTime? fetchTime,
-    Uri? sourceUrl,
+    String? sourceUrl,
     String? content,
     String? title,
     String? embeddingSummary,
@@ -110,7 +110,7 @@ abstract class RAGDocument
       if (id != null) 'id': id,
       'embedding': embedding.toJson(),
       'fetchTime': fetchTime.toJson(),
-      'sourceUrl': sourceUrl.toJson(),
+      'sourceUrl': sourceUrl,
       'content': content,
       'title': title,
       'embeddingSummary': embeddingSummary,
@@ -127,7 +127,7 @@ abstract class RAGDocument
       if (id != null) 'id': id,
       'embedding': embedding.toJson(),
       'fetchTime': fetchTime.toJson(),
-      'sourceUrl': sourceUrl.toJson(),
+      'sourceUrl': sourceUrl,
       'content': content,
       'title': title,
       'embeddingSummary': embeddingSummary,
@@ -174,7 +174,7 @@ class _RAGDocumentImpl extends RAGDocument {
     int? id,
     required _i1.Vector embedding,
     required DateTime fetchTime,
-    required Uri sourceUrl,
+    required String sourceUrl,
     required String content,
     required String title,
     required String embeddingSummary,
@@ -202,7 +202,7 @@ class _RAGDocumentImpl extends RAGDocument {
     Object? id = _Undefined,
     _i1.Vector? embedding,
     DateTime? fetchTime,
-    Uri? sourceUrl,
+    String? sourceUrl,
     String? content,
     String? title,
     String? embeddingSummary,
@@ -240,7 +240,7 @@ class RAGDocumentUpdateTable extends _i1.UpdateTable<RAGDocumentTable> {
         value,
       );
 
-  _i1.ColumnValue<Uri, Uri> sourceUrl(Uri value) => _i1.ColumnValue(
+  _i1.ColumnValue<String, String> sourceUrl(String value) => _i1.ColumnValue(
     table.sourceUrl,
     value,
   );
@@ -292,7 +292,7 @@ class RAGDocumentTable extends _i1.Table<int?> {
       'fetchTime',
       this,
     );
-    sourceUrl = _i1.ColumnUri(
+    sourceUrl = _i1.ColumnString(
       'sourceUrl',
       this,
     );
@@ -329,7 +329,7 @@ class RAGDocumentTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime fetchTime;
 
-  late final _i1.ColumnUri sourceUrl;
+  late final _i1.ColumnString sourceUrl;
 
   late final _i1.ColumnString content;
 

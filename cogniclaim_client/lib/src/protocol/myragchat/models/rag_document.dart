@@ -31,7 +31,7 @@ abstract class RAGDocument implements _i1.SerializableModel {
     int? id,
     required _i1.Vector embedding,
     required DateTime fetchTime,
-    required Uri sourceUrl,
+    required String sourceUrl,
     required String content,
     required String title,
     required String embeddingSummary,
@@ -49,7 +49,7 @@ abstract class RAGDocument implements _i1.SerializableModel {
       fetchTime: _i1.DateTimeJsonExtension.fromJson(
         jsonSerialization['fetchTime'],
       ),
-      sourceUrl: _i1.UriJsonExtension.fromJson(jsonSerialization['sourceUrl']),
+      sourceUrl: jsonSerialization['sourceUrl'] as String,
       content: jsonSerialization['content'] as String,
       title: jsonSerialization['title'] as String,
       embeddingSummary: jsonSerialization['embeddingSummary'] as String,
@@ -68,7 +68,7 @@ abstract class RAGDocument implements _i1.SerializableModel {
 
   DateTime fetchTime;
 
-  Uri sourceUrl;
+  String sourceUrl;
 
   String content;
 
@@ -89,7 +89,7 @@ abstract class RAGDocument implements _i1.SerializableModel {
     int? id,
     _i1.Vector? embedding,
     DateTime? fetchTime,
-    Uri? sourceUrl,
+    String? sourceUrl,
     String? content,
     String? title,
     String? embeddingSummary,
@@ -104,7 +104,7 @@ abstract class RAGDocument implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'embedding': embedding.toJson(),
       'fetchTime': fetchTime.toJson(),
-      'sourceUrl': sourceUrl.toJson(),
+      'sourceUrl': sourceUrl,
       'content': content,
       'title': title,
       'embeddingSummary': embeddingSummary,
@@ -127,7 +127,7 @@ class _RAGDocumentImpl extends RAGDocument {
     int? id,
     required _i1.Vector embedding,
     required DateTime fetchTime,
-    required Uri sourceUrl,
+    required String sourceUrl,
     required String content,
     required String title,
     required String embeddingSummary,
@@ -155,7 +155,7 @@ class _RAGDocumentImpl extends RAGDocument {
     Object? id = _Undefined,
     _i1.Vector? embedding,
     DateTime? fetchTime,
-    Uri? sourceUrl,
+    String? sourceUrl,
     String? content,
     String? title,
     String? embeddingSummary,

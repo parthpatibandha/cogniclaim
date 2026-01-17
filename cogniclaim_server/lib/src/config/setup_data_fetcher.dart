@@ -10,9 +10,8 @@ Future<void> configureDataFetcher() async {
     repo: 'cogniclaim_server',
     branch: 'main',
     basePath: 'privacy_policy.pdf',
-    referenceUrl: Uri.parse(
-      'https://firebasestorage.googleapis.com/v0/b/flarestudio-it.firebasestorage.app/o/AFourWheeler.pdf?alt=media&token=02beb800-702a-4d2c-98a8-8d39166c4290',
-    ),
+    referenceUrl:
+        'https://firebasestorage.googleapis.com/v0/b/flarestudio-it.firebasestorage.app/o/AFourWheeler.pdf?alt=media&token=02beb800-702a-4d2c-98a8-8d39166c4290',
   );
 
   final priceDoc = PdfDocsDataSource(
@@ -21,13 +20,12 @@ Future<void> configureDataFetcher() async {
     repo: 'cogniclaim_server',
     branch: 'main',
     basePath: 'price_document.pdf',
-    referenceUrl: Uri.parse(
-      'https://firebasestorage.googleapis.com/v0/b/flarestudio-it.firebasestorage.app/o/CarItemPrice.pdf?alt=media&token=b54a50a9-cf68-4c6b-a679-9a1107f5f4c5',
-    ),
+    referenceUrl:
+        'https://firebasestorage.googleapis.com/v0/b/flarestudio-it.firebasestorage.app/o/CarItemPrice.pdf?alt=media&token=b54a50a9-cf68-4c6b-a679-9a1107f5f4c5',
   );
 
   final dataSources = [
-    policyDoc,
+    //policyDoc,
     priceDoc,
   ];
 

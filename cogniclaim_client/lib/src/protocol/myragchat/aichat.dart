@@ -14,6 +14,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 abstract class AiChat implements _i1.SerializableModel {
   AiChat._({
+    this.id,
     required this.uniqueId,
     required this.message,
     required this.author,
@@ -22,6 +23,7 @@ abstract class AiChat implements _i1.SerializableModel {
   });
 
   factory AiChat({
+    int? id,
     required String uniqueId,
     required String message,
     required String author,
@@ -31,6 +33,7 @@ abstract class AiChat implements _i1.SerializableModel {
 
   factory AiChat.fromJson(Map<String, dynamic> jsonSerialization) {
     return AiChat(
+      id: jsonSerialization['id'] as int?,
       uniqueId: jsonSerialization['uniqueId'] as String,
       message: jsonSerialization['message'] as String,
       author: jsonSerialization['author'] as String,
@@ -40,6 +43,11 @@ abstract class AiChat implements _i1.SerializableModel {
       image: jsonSerialization['image'] as String?,
     );
   }
+
+  /// The database id, set if the object has been inserted into the
+  /// database or if it has been fetched from the database. Otherwise,
+  /// the id will be null.
+  int? id;
 
   /// The unique id
   String uniqueId;
@@ -60,6 +68,7 @@ abstract class AiChat implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   AiChat copyWith({
+    int? id,
     String? uniqueId,
     String? message,
     String? author,
@@ -70,6 +79,7 @@ abstract class AiChat implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'AiChat',
+      if (id != null) 'id': id,
       'uniqueId': uniqueId,
       'message': message,
       'author': author,
@@ -88,12 +98,14 @@ class _Undefined {}
 
 class _AiChatImpl extends AiChat {
   _AiChatImpl({
+    int? id,
     required String uniqueId,
     required String message,
     required String author,
     required DateTime timestamp,
     String? image,
   }) : super._(
+         id: id,
          uniqueId: uniqueId,
          message: message,
          author: author,
@@ -106,6 +118,7 @@ class _AiChatImpl extends AiChat {
   @_i1.useResult
   @override
   AiChat copyWith({
+    Object? id = _Undefined,
     String? uniqueId,
     String? message,
     String? author,
@@ -113,6 +126,7 @@ class _AiChatImpl extends AiChat {
     Object? image = _Undefined,
   }) {
     return AiChat(
+      id: id is int? ? id : this.id,
       uniqueId: uniqueId ?? this.uniqueId,
       message: message ?? this.message,
       author: author ?? this.author,

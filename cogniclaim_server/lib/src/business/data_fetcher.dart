@@ -65,7 +65,16 @@ class DataFetcher {
       );
 
       final ragDocument = await _createRagDocument(session, rawDocument);
+      session.log(
+        'Rag document is ready summary : ${ragDocument.embeddingSummary}',
+        level: LogLevel.debug,
+      );
       await _saveRagDocument(session, ragDocument);
+
+      session.log(
+        'Saved document: ${rawDocument.title}',
+        level: LogLevel.debug,
+      );
 
       // Pause as to not exhuast Gemini's quota
       await Future.delayed(const Duration(milliseconds: 100));
@@ -93,7 +102,10 @@ class DataFetcher {
     session.log('Generating embedding for summary.', level: LogLevel.debug);
     final embedding = await genAi.generateEmbedding(embeddingSummary);
 
-    session.log('Embeddings generated.', level: LogLevel.debug);
+    session.log(
+      'Embeddings generated. Size: ${embedding.toList().length}',
+      level: LogLevel.debug,
+    );
 
     return RAGDocument(
       title: rawDocument.title,
@@ -113,31 +125,42 @@ class DataFetcher {
     RAGDocument ragDocument,
   ) async {
     session.log(
-      'Saving rag document: ${ragDocument.sourceUrl}',
+      'Saving rag document: ${ragDocument.title}',
       level: LogLevel.debug,
     );
-
-    final existingDocument = await RAGDocument.db.findFirstRow(
-      session,
-      where: (t) => t.sourceUrl.equals(ragDocument.sourceUrl),
-    );
-
-    if (existingDocument == null) {
-      await RAGDocument.db.insertRow(session, ragDocument);
-    } else {
-      ragDocument.id = existingDocument.id;
-      await RAGDocument.db.updateRow(
+    try {
+      final existingDocument = await RAGDocument.db.findFirstRow(
         session,
-        ragDocument,
+        where: (t) => t.sourceUrl.equals(ragDocument.sourceUrl),
       );
-    }
 
-    if (ragDocument.type == RAGDocumentType.documentation) {
-      await DocsTableOfContents.invalidateCache(session);
+      if (existingDocument == null) {
+        await RAGDocument.db.insertRow(session, ragDocument);
+      } else {
+        ragDocument.id = existingDocument.id;
+        await RAGDocument.db.updateRow(session, ragDocument);
+      }
+
+      session.log(
+        'Document saved: ${ragDocument.title}',
+        level: LogLevel.debug,
+      );
+
+      if (ragDocument.type == RAGDocumentType.documentation) {
+        await DocsTableOfContents.invalidateCache(session);
+      }
+    } catch (e, st) {
+      session.log(
+        'Failed saving rag document: $e',
+        level: LogLevel.error,
+        stackTrace: st,
+      );
+      await session.close();
+      rethrow;
     }
   }
 
-  Future<bool> shouldFetchUrl(Session session, Uri sourceUrl) async {
+  Future<bool> shouldFetchUrl(Session session, String sourceUrl) async {
     session.log(
       'Checking if should fetch url: $sourceUrl',
       level: LogLevel.debug,
@@ -212,6 +235,10 @@ class _FetchDataFutureCall extends FutureCall<DataFetcherTask> {
         success = true;
       } catch (e, stackTrace) {
         session.log(
+          'Error Fetching data from ${dataSource.name}, Error : ${e.toString()}',
+          level: LogLevel.debug,
+        );
+        session.log(
           'Error fetching data from $dataSource: $e',
           exception: e,
           stackTrace: stackTrace,
@@ -230,6 +257,7 @@ class _FetchDataFutureCall extends FutureCall<DataFetcherTask> {
           dataFetcher.cacheDuration,
           identifier: _futureCallIdentifier,
         );
+        session.log('Data fetch success', level: LogLevel.debug);
       } else {
         // We failed to fetch data, so we'll try again in a minute.
         session.serverpod.futureCallWithDelay(
@@ -241,6 +269,7 @@ class _FetchDataFutureCall extends FutureCall<DataFetcherTask> {
           _fetchRetryDelay,
           identifier: _futureCallIdentifier,
         );
+        session.log('Data fetch failed', level: LogLevel.debug);
       }
     } else if (task.type == DataFetcherTaskType.cleanUp) {
       // Remove old data.

@@ -42,24 +42,6 @@ class AichatEndpoint extends Endpoint {
 
     List<DataPart> imageAttachments = [];
 
-    // if (images != null && images.isNotEmpty) {
-    //   for (var image in images) {
-    //     final bioFile = XFile.fromData(
-    //       await image.readAsBytes(),
-    //       path: image.path,
-    //     );
-    //     final dataPart = await DataPart.fromFile(bioFile);
-    //     imageAttachments.add(dataPart);
-    //   }
-    // }
-
-    // if (imagePath != null && imagePath.isNotEmpty == true) {
-    //   var file = File(imagePath);
-    //   var xFile = XFile.fromData(await file.readAsBytes());
-    //   final dataPart = await DataPart.fromFile(xFile);
-    //   imageAttachments.add(dataPart);
-    // }
-
     // Option A: received file bytes from client
     if (imageBytes != null && imageBytes.isNotEmpty) {
       final bytes = Uint8List.fromList(imageBytes); // convert back to Uint8List
@@ -91,12 +73,14 @@ class AichatEndpoint extends Endpoint {
     final response = await agent.send(message, attachments: imageAttachments);
     final responseText = response.output;
 
-    return AiChat(
+    final aiChat = AiChat(
       uniqueId: uniqueId,
       message: responseText,
       author: 'AI Bot',
       timestamp: DateTime.now(),
     );
+    await AiChat.db.insert(session, [aiChat]);
+    return aiChat;
   }
 
   Future<Uint8List> readResponseBytes(HttpClientResponse response) async {

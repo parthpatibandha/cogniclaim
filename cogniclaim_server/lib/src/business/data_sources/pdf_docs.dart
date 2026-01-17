@@ -10,7 +10,7 @@ class PdfDocsDataSource implements DataSource {
   final String repo;
   final String branch;
   final String basePath;
-  final Uri referenceUrl;
+  final String referenceUrl;
 
   /// Latest version, if known.
   final String? latestVersion;
@@ -25,32 +25,37 @@ class PdfDocsDataSource implements DataSource {
     this.latestVersion,
   });
 
-  static Future<http.Response> _getPdfDocument(Uri url) async {
-    return await http.get(url);
+  static Future<http.Response> _getPdfDocument(String url) async {
+    return await http.get(Uri.parse(url));
   }
 
   @override
-  String get name => 'GithubDocs:$owner/$repo:$basePath';
+  String get name => title;
+
+  @override
+  String get url => referenceUrl.toString();
 
   @override
   Stream<RawRAGDocument> fetch(
     Session session,
     DataFetcher fetcher, {
     String? path,
-    Uri? referenceUrl,
   }) async* {
-    if (referenceUrl != null) {
-      final fileResponse = await _getPdfDocument(referenceUrl);
-      if (fileResponse.statusCode == 200) {
-        yield RawRAGDocument(
-          sourceUrl: referenceUrl,
-          document: fileResponse.body,
-          dataSourceType: DataSourceType.markdown,
-          documentType: RAGDocumentType.documentation,
-          title: title,
-          domain: "",
-        );
-      }
+    session.log('getPDFDocument from $referenceUrl', level: LogLevel.debug);
+    final fileResponse = await _getPdfDocument(referenceUrl);
+    if (fileResponse.statusCode == 200) {
+      session.log(
+        'getPDFDocument from $referenceUrl ,statusCode: ${fileResponse.statusCode}',
+        level: LogLevel.debug,
+      );
+      yield RawRAGDocument(
+        sourceUrl: referenceUrl,
+        document: fileResponse.body,
+        dataSourceType: DataSourceType.text,
+        documentType: RAGDocumentType.documentation,
+        title: title,
+        domain: "https://firebasestorage.googleapis.com/",
+      );
     }
   }
 }
